@@ -1,10 +1,16 @@
 ﻿import axios from "axios";
+import ErrorContext from "../context/ErrorContext";
 
 const baseUrl = "/api/persons";
 
-const getAll = () => {
-  const request = axios.get(baseUrl);
-  return request.then((response) => response.data);
+const getAll = async () => {
+  try {
+    const response = await axios.get(baseUrl);
+    return response.data;
+  } catch (error) {
+    console.error("Error getting all persons:", error);
+    //setMessage(error.response.data.error, "error");
+  }
 };
 
 function createPersonObject(newName, number, persons) {
@@ -26,33 +32,32 @@ const checkPersonExists = async (id) => {
       console.error("An error occurred while checking:", error);
       throw error;
     }
-
     return false;
   }
   return false;
 };
 
-const create = async (objectToAdd) => {
+const create = async (objectToAdd) => {  
+    const response = await axios.post(baseUrl, objectToAdd);
+    if (response.status !== 200 && response.status !== 201) {
+      throw new Error("Error creating person");
+    }
+    
+    return response.data;
+}
+
+const update = async (id, newObject) => {
   try {
-    const request = axios.post(baseUrl, objectToAdd);
-    const response = await request;
+    const response = await axios.put(`${baseUrl}/${id}`, newObject);
     return response.data;
   } catch (error) {
-    console.error("Error creating person:", error.response.data);
+    console.error("Error updating person:", error.response.data);
+    //setMessage(error.response.data.error, "error");
   }
-};
-
-const update = (id, newObject) => {
-  const request = axios.put(`${baseUrl}/${id}`, newObject);
-  return request.then((response) => response.data);
 };
 
 const deletePerson = async (id) => {
-  const personExists = await checkPersonExists(id);
-
-  if (!personExists) {
-    throw new Error(`Person with id ${id} does not exist`);
-  }
+  await personExists(id);
 
   try {
     const response = await axios.delete(`${baseUrl}/${id}`);
@@ -71,3 +76,17 @@ export default {
   deletePerson,
   checkPersonExists,
 };
+
+// Helper functions
+async function personExists(id) {
+  try {
+    const personExists = await checkPersonExists(id);
+
+    if (!personExists) {
+      console.error(`Person with id ${id} does not exist`);
+    }
+  } catch (error) {
+    console.error("Error while checking if person exists:", error);
+    throw error;
+  }
+}

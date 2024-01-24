@@ -4,6 +4,7 @@ import RenderPersons from "./components/RenderPersons.jsx";
 import Search from "./components/Search.jsx";
 import serverHandler from "./services/serverHandler.js";
 import MessageArea from "./components/MessageArea.jsx";
+import ErrorProvider from "./context/ErrorContext.jsx";
 
 const App = () => {
   const [persons, setPersons] = useState([]);
@@ -13,6 +14,7 @@ const App = () => {
   const [isLoading, setIsLoading] = useState(true);
   const [isCreating, setIsCreating] = useState(false);
   const [isDeleting, setIsDeleting] = useState(false);
+
   const handleNameChange = (event) => {
     setNewName(event.target.value);
   };
@@ -50,33 +52,35 @@ const App = () => {
 
     return (
       <div>
-        <MessageArea  />
-        <Search
-          handleSearchChange={handleSearchChange}
-          searchValue={searchValue}
-        />
-        <AddForm
-          isCreating={isCreating}
-          setIsCreating={setIsCreating}
-          handleChange={handleNameChange}
-          handleNumberChange={handleNumberChange}
-          persons={persons}
-          number={number}
-          newName={newName}
-          setPersons={setPersons}
-          setNewName={setNewName}
-          setNumber={setNumber}
-        />
-        <h2>Numbers</h2>
-        <RenderPersons
-          isLoading={isLoading}
-          isCreating={isCreating}
-          isDeleting={isDeleting}
-          setIsDeleting={setIsDeleting}
-          searchValue={searchValue}
-          persons={persons}
-          setPersons={setPersons}
-        />
+        <ErrorProvider>
+          <MessageArea />
+          <Search
+            handleSearchChange={handleSearchChange}
+            searchValue={searchValue}
+          />
+          <AddForm
+            isCreating={isCreating}
+            setIsCreating={setIsCreating}
+            handleChange={handleNameChange}
+            handleNumberChange={handleNumberChange}
+            persons={persons}
+            number={number}
+            newName={newName}
+            setPersons={setPersons}
+            setNewName={setNewName}
+            setNumber={setNumber}
+          />
+          <h2>Numbers</h2>
+          <RenderPersons
+            isLoading={isLoading}
+            isCreating={isCreating}
+            isDeleting={isDeleting}
+            setIsDeleting={setIsDeleting}
+            searchValue={searchValue}
+            persons={persons}
+            setPersons={setPersons}
+          />
+        </ErrorProvider>
       </div>
     );
   };

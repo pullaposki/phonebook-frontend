@@ -1,17 +1,22 @@
-import { useEffect, useState } from "react";
-import serverHandler from "../services/serverHandler";
+import useErrorContext from "../context/useErrorContext";
+
+const errorStyle = {
+  color: "red",
+  background: "lightgrey",
+  fontSize: "20px",
+  borderStyle: "solid",
+  borderRadius: "5px",
+  padding: "10px",
+  marginBottom: "10px",
+};
 
 const MessageArea = () => {
-  const [message, setMessage] = useState("");
+  const { errorMessage } = useErrorContext;
+  console.log("errorMessage: ", errorMessage);
 
-  useEffect(() => {
-    serverHandler.create().catch((error) => {
-      console.log("error getting data ", error);
-      setMessage("Error getting data from server");
-    });
-  }, []);
+  if (!errorMessage) return null;
 
-  return <div>{message}</div>;
+  return <h4 style={errorStyle}>{errorMessage}</h4>;
 };
 
 export default MessageArea;
