@@ -15,7 +15,6 @@ const AddForm = ({
   handleNumberChange,
 }) => {
   const { errorMessage, setErrorMessage } = useErrorContext();
-  console.log("setErrorMessage: ", setErrorMessage);
 
   const handleSubmit = async (event) => {
     event.preventDefault();
@@ -32,11 +31,10 @@ const AddForm = ({
       if (person.name.toLowerCase() === objectToAdd.name.toLowerCase()) {
         if (confirm("Name exists. Update number?")) {
           try {
-            const updatedPerson = await serverHandler.update(
-              person.id,
-              objectToAdd
-            );
-            updatePerson(person, updatedPerson);
+            const response = await serverHandler.update(person.id, objectToAdd);
+            debugger;
+            console.log("server handler update run, ", response);
+            updatePerson(response);
             return;
           } catch (error) {
             handleUpdateError(error);
@@ -58,9 +56,7 @@ const AddForm = ({
 
     function handleCreateError(error) {
       console.error("Error during create: ", error);
-      console.log("Setting errorMessage:");
       setErrorMessage(errorMessage);
-      console.log(errorMessage);
       setIsCreating(false);
     }
 
@@ -84,8 +80,9 @@ const AddForm = ({
       console.log("Cancelled update");
     }
 
-    function updatePerson(personToUpdate, updatedPerson) {
-      const index = persons.findIndex((p) => p.id === personToUpdate.id);
+    function updatePerson(updatedPerson) {
+      debugger;
+      const index = persons.findIndex((p) => p.id === updatedPerson.id);
       if (index !== -1) {
         const updatedPersons = [...persons];
         updatedPersons[index] = updatedPerson;

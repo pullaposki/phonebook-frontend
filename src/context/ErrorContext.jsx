@@ -6,9 +6,7 @@ export const ErrorContext = React.createContext();
 export default function ErrorProvider({ children }) {
   const [errorMessage, setErrorMessage] = useState(null);
 
-  useEffect(() => {
-    console.log("errorMessage: ", errorMessage);
-  }, [errorMessage]);
+  useEffect(() => {}, [errorMessage]);
 
   return (
     <ErrorContext.Provider value={{ errorMessage, setErrorMessage }}>

@@ -12,7 +12,6 @@ const errorStyle = {
 
 const MessageArea = () => {
   const { errorMessage } = useErrorContext;
-  console.log("errorMessage: ", errorMessage);
 
   if (!errorMessage) return null;
 

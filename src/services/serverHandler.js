@@ -13,8 +13,8 @@ const getAll = async () => {
   }
 };
 
-function createPersonObject(newName, number, persons) {
-  return { name: newName, number: number, id: persons.length + 1 };
+function createPersonObject(newName, number) {
+  return { name: newName, number: number };
 }
 
 const checkPersonExists = async (id) => {
@@ -37,14 +37,14 @@ const checkPersonExists = async (id) => {
   return false;
 };
 
-const create = async (objectToAdd) => {  
-    const response = await axios.post(baseUrl, objectToAdd);
-    if (response.status !== 200 && response.status !== 201) {
-      throw new Error("Error creating person");
-    }
-    
-    return response.data;
-}
+const create = async (objectToAdd) => {
+  const response = await axios.post(baseUrl, objectToAdd);
+  if (response.status !== 200 && response.status !== 201) {
+    throw new Error("Error creating person");
+  }
+
+  return response.data;
+};
 
 const update = async (id, newObject) => {
   try {
@@ -52,7 +52,6 @@ const update = async (id, newObject) => {
     return response.data;
   } catch (error) {
     console.error("Error updating person:", error.response.data);
-    //setMessage(error.response.data.error, "error");
   }
 };
 
